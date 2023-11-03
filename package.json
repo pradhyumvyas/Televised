@@ -4,12 +4,15 @@
   "description": "A backend for video streaming platform, ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "Videos",
     "stream"
   ],
   "author": "Pradhyum Vyas",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
