@@ -1,0 +1,15 @@
+{
+  "name": "televised",
+  "version": "1.0.0",
+  "description": "A backend for video streaming platform, ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Videos",
+    "stream"
+  ],
+  "author": "Pradhyum Vyas",
+  "license": "ISC"
+}
