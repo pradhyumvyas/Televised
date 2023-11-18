@@ -19,7 +19,7 @@ connectDB()
       console.log("App is listen on ", process.env.PORT);
      })
 })
-.cach((error)=>{
+.catch((error)=>{
    console.error("Mongo DB connection failed !!: ", error);
    process.exit(1);
 })
