@@ -26,8 +26,11 @@ app.use(express.static("public"));
 // For parsing cookies or applying CURD operations on client side
 app.use(cookieParser());
 
-app.use(express.static("public"));
+// Routes starts here
+import userRouter from "./routes/user.routes.js";
 
-app.use(cookieParser());
+// Mounting routes with middleware
+app.use("/api/v1/users", userRouter);
 
+// Routes ends here
 export {app}
