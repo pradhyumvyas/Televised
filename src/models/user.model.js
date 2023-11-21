@@ -46,6 +46,7 @@ const userSchema = new Schema({
       }
 },{timeStamps:true});
 
+//pre hook for hashing password when password is modified or created, next() is used to move to next middleware
 userSchema.pre("save", async function(next){
    if(!this.isModified("password")) return next();
 
@@ -53,6 +54,7 @@ userSchema.pre("save", async function(next){
    next()
 })
 
+// for checking or comparing password at the time of logging in
 userSchema.methods.isPasswordCorrect = async function(password){
    return await bcrypt.compare(password,this.password);
 }
