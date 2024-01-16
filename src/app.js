@@ -29,7 +29,8 @@ app.use(cookieParser());
 // Routes starts here
 import userRouter from "./routes/user.routes.js";
 
-// Mounting routes with middleware
+// Mounting routes with middleware, app.use() is used to mount middleware 
+//instead of app.get() or app.post()
 app.use("/api/v1/users", userRouter);
 
 // Routes ends here

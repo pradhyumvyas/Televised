@@ -1,7 +1,10 @@
+
+// below function is used to handle async await errors in express, 
+// no need to use try catch block in every controller
 const asyncHandler = (requestHandler)=>{
    return (req, res, next)=>{
-      Promise.resolve(requestHandler(req, res, next)).
-      catch((err)=> next(err));
+      Promise.resolve(requestHandler(req, res, next))
+      .catch((err)=> next(err));
    }
 }
 
