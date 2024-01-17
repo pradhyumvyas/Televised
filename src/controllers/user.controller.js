@@ -21,21 +21,21 @@ const registerUser = asyncHandler(async (req, res, next) => {
   console.log("userdata",fullName, email, username, password);
 
   if(
-      [fullName, email, username,passsword].some((field)=> field?.trim() === "")
+      [fullName, email, username,password].some((field)=> field?.trim() === "")
   ){
       throw new ApiError(400, `${field} cannot be empty`)
   }
 
-  User.findOne({
+  const isUserAvailabe = await User.findOne({
       $or: [
           { username },
           { email}
       ]
-  }).then((user)=>{
-      if(user){
-          throw new ApiError(409, "User already exists with this username or email")
-      }
   })
+
+  if(isUserAvailabe){
+   throw new ApiError(409, "User already exists with this username or email")
+}
 
   console.info("files", req.files);
    const avatar = req.files?.avatar ? req.files.avatar[0].path : null;
@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
       password
    })
 
-   const userCreated = User.findById(user._id).select(
+   const userCreated = await User.findById(user._id).select(
       "-password -refreshToken"
    )
    if(!userCreated){

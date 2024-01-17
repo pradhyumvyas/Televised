@@ -28,9 +28,9 @@ const userSchema = new Schema({
          type:String, // cloudnary url
          required:true,
       },
-      username:{
-         type:String
-      },
+      coverImage: {
+         type: String, // cloudinary url
+     },
       watchHistory:[
          {
             type:Schema.Types.ObjectId,
@@ -44,7 +44,7 @@ const userSchema = new Schema({
       refreshToken:{
          type:String,
       }
-},{timeStamps:true});
+},{timestamps:true});
 
 //pre hook for hashing password when password is modified or created, next() is used to move to next middleware
 userSchema.pre("save", async function(next){
