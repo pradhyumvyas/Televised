@@ -26,6 +26,11 @@ const generateAccessAndRefreshTokens = async (userId) =>{
    }
 }
 
+const cookieResOptions = {
+   httpOnly:true,
+   // secure:true
+}
+
 // @desc    Register a new user
 const registerUser = asyncHandler(async (req, res, next) => {
    /* 
@@ -133,17 +138,13 @@ const loginUser = asyncHandler(async (req, res, next)=>{
 
       const loggedInUser = await User.findById(user._id).select("-password -refreshToken"); //We can update above also instead of hit db again
 
-      const options = {
-         httpOnly:true,
-         // secure:true // for https
-      }
 
       console.log("Cookies",accessToken, refreshToken)
       
       return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, cookieResOptions)
+      .cookie("refreshToken", refreshToken, cookieResOptions)
       .json(
          new ApiResponse(
             200, 
@@ -155,9 +156,9 @@ const loginUser = asyncHandler(async (req, res, next)=>{
             "Logged in successfully"
          )
       )
-   })
+})
 
-   const logoutUser = asyncHandler(async (req, res, next)=>{
+const logoutUser = asyncHandler(async (req, res, next)=>{
       await User.findByIdAndUpdate(
          req.user._id, 
          {
@@ -169,14 +170,11 @@ const loginUser = asyncHandler(async (req, res, next)=>{
             new:true
          }
       );
-      const options = {
-         httpOnly:true,
-         secure:true
-      }
+
       return res
       .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
+      .clearCookie("accessToken", cookieResOptions)
+      .clearCookie("refreshToken", cookieResOptions)
       .json(
          new ApiResponse(
             200, 
@@ -184,9 +182,9 @@ const loginUser = asyncHandler(async (req, res, next)=>{
             "Logged out successfully"
          )
       )
-   })
+})
 
-   const refreshToken = asyncHandler(async (req, res, next)=>{
+const refreshToken = asyncHandler(async (req, res, next)=>{
       /*
          1) get refresh token from cookies
          2) check if refresh token is available or not
@@ -208,27 +206,25 @@ const loginUser = asyncHandler(async (req, res, next)=>{
             process.env.REFRESH_TOKEN_SECRET
          )
    
-         const user = await user.findById(decodedToken?._id);
+         const user = await User.findById(decodedToken?._id);
    
          if(!user){
             throw new ApiError(404, "Invalid Token, User not found")
          }
    
          const isRefreshTokenAvailable = user.refreshToken === incomingRefreshToken;
+
          if (!isRefreshTokenAvailable) {
                throw new ApiError(401, "Refresh token is expired, please login again")
          }
    
          const {accessToken,newRefreshToken} = await generateAccessAndRefreshTokens(user._id);
-         const options = {
-            httpOnly:true,
-            // secure:true
-         }
+         
    
          return res
          .status(200)
-         .cookie("accessToken", accessToken, options)
-         .cookie("refreshToken", newRefreshToken, options)
+         .cookie("accessToken", accessToken, cookieResOptions)
+         .cookie("refreshToken", newRefreshToken, cookieResOptions)
          .json(
             new ApiResponse(
                200, 
@@ -242,7 +238,7 @@ const loginUser = asyncHandler(async (req, res, next)=>{
       } catch (error) {
          throw new ApiError(401, error?.message || "Invalid Token, please login again")
       }
-   })
+})
 
 export {
    registerUser,
