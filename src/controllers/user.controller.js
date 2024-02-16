@@ -61,10 +61,10 @@ const registerUser = asyncHandler(async (req, res, next) => {
   })
 
   if(isUserAvailabe){
-   throw new ApiError(409, "User already exists with this username or email")
-}
+      throw new ApiError(409, "User already exists with this username or email")
+   }
 
-  console.info("files", req.files);
+   console.info("files", req.files);
    const avatar = req.files?.avatar ? req.files.avatar[0].path : null;
    const coverImage = req.files?.coverImage ? req.files.coverImage[0].path : null;
 
@@ -137,7 +137,6 @@ const loginUser = asyncHandler(async (req, res, next)=>{
       const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id);
 
       const loggedInUser = await User.findById(user._id).select("-password -refreshToken"); //We can update above also instead of hit db again
-
 
       console.log("Cookies",accessToken, refreshToken)
       
@@ -220,7 +219,6 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
    
          const {accessToken,newRefreshToken} = await generateAccessAndRefreshTokens(user._id);
          
-   
          return res
          .status(200)
          .cookie("accessToken", accessToken, cookieResOptions)
@@ -303,7 +301,6 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
 
 const updateUserAvatar = asyncHandler(async(req,res)=>{
    const avatarLocalPath = req.file?.path
-
    if(!avatarLocalPath){
       throw new ApiError(400,"File path is missing")
    }
@@ -332,6 +329,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
       )
    )
 })
+
 const updateUserCoverImage = asyncHandler(async(req,res)=>{
    const avatarLocalPath = req.file?.path
 
