@@ -58,7 +58,7 @@ userSchema.pre("save", async function(next){
 userSchema.methods.isPasswordCorrect = async function(password){
    return await bcrypt.compare(password,this.password);
 }
-
+//Acess token is generated using jwt.sign() method with user data and secret key and expiry time as payload
 userSchema.methods.generateAccessToken = function(){
    return jwt.sign(
       {
@@ -73,6 +73,9 @@ userSchema.methods.generateAccessToken = function(){
       }
    )
 }
+//Refresh token is generated using jwt.sign() method with user id and secret key and expiry time as payload
+// Difference between access token and refresh token is that refresh token is used to 
+// generate new access token when access token is expired and refresh token is used to authenticate user
 userSchema.methods.generateRefreshToken = function(){
    return jwt.sign(
       {
